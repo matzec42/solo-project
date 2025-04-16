@@ -1,0 +1,50 @@
+{
+  "name": "solo-project",
+  "version": "1.0.0",
+  "description": "1. Identify your user(s) Home cooks; people who want creative ideas for cooking or want to avoid food waste 2. What is the problem you’re solving? Whether it’s to try a new recipe or use ingredients they have on hand, helping people find recipes for things they already have in their kitchen/fridge 3. What is the solution? Develop an app where users can: search for recipes by ingredient(s) store recipes in a recipe book that they can edit (CRUD operations) 4. What is the MVP scope? (core features you must get working) Recipe search, user data storage, login 5. What are the tough technical challenges involved with solving this problem? Finding and connecting with an open API for searches/queries; webpack design and set up 6. What are the stretch goals? OAuth login; a feature that suggests wine pairings based on ingredients",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"webpack-dev-server\" \"node ./server/server.js\"",
+    "build": "Webpack .",
+    "serve": "webpack serve"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.25.6",
+    "@babel/core": "^7.25.2",
+    "@babel/eslint-parser": "^7.25.1",
+    "@babel/plugin-syntax-jsx": "^7.24.7",
+    "@babel/preset-env": "^7.25.4",
+    "@babel/preset-react": "^7.24.7",
+    "@babel/runtime": "^7.25.6",
+    "babel-loader": "^9.2.1",
+    "concurrently": "^9.0.1",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-jest": "^28.8.3",
+    "html-webpack-plugin": "^5.6.0",
+    "nodemon": "^3.1.7",
+    "path": "^0.12.7",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-middleware": "^7.4.2",
+    "webpack-dev-server": "^5.1.0"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.0",
+    "jsonwebtoken": "^9.0.2",
+    "node-fetch": "^3.3.2",
+    "pg": "^8.13.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router": "^7.5.0",
+    "react-router-dom": "^6.26.2"
+  }
+}

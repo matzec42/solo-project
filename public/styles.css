@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap');
+
+body {
+    /* font style */
+    font-family: 'Inter';
+    font-size: 1em;
+    width: 100%;
+
+    /* background color */
+    background-color: rgb(225, 245, 225);
+}
+
+#homePage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#searchContainer {
+    text-align: center;
+}
+
+#recipeBook {
+    text-align: center;
+    border-color: black;
+    border-width: 1px;
+}
+
+#recipeMakerDiv {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    border-color: black;
+    border-width: 1px;
+}
+
+.recipeCardMakerFieldDivs {
+    display: flex;
+    width: auto;
+}
+
+textarea {
+    width: 32em;
+    height: 8em;
+    font-family: 'Inter';
+}
+
+h1 {
+    text-align: center;
+    color: green;
+    font-size: 3em;
+}
+
+h3 {
+    text-align: center;
+    font-style: bold;
+    font-size: 1em;
+}
+
+h4 {
+    font-style: italic;
+}
+
+p {
+    font-style: italic;
+    font-weight: 750;
+}
+
+input {
+    height: 2em;
+    width: 15em;
+    font-family: 'Inter';
+
+    transition: opacity .2s ease-in;
+    &:hover{
+    cursor: pointer;
+    opacity: 0.70;
+    }
+}
+
+/* label {
+
+} */
+
+/* button styling */
+button {
+    margin: 5px;
+    width: 10em;
+    font-size: 1em;
+    padding: 5px;
+    border-color: white;
+    border-width: 1px;
+    background-color: green;
+    box-shadow: 5px white;
+    color: white;
+    opacity: 1;
+    border-radius: 8px;
+
+    /* hover over buttons */
+    transition: opacity .2s ease-in;
+    &:hover{
+    cursor: pointer;
+    opacity: 0.75;
+    }
+}
+
+#submitButton {
+    padding-left: 5px;
+}
+
+#logoutButton {
+    align-self: flex-end;
+    margin-right: 1em;
+}
+
+ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+li {
+    align-items: flex-start;
+}
+
+img {
+    height: 250px;
+    width: 250px;
+    padding: 10px;
+    object-fit: contain;
+    border-radius: 30px;
+    box-shadow: 3px black;
+
+    transition: opacity .3s ease-in;
+    &:hover{
+        cursor: pointer;
+        height: 600px;
+        width: 600px;
+        border-radius: 30px;
+        }
+}
+
+footer {
+    text-align: center;
+    font-style: italic;
+    padding-top: 30px;
+}
+
+

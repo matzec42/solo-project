@@ -1,0 +1,8 @@
+# ignore dependencies and node files
+node_modules
+
+# build folder created by webpack
+build
+
+# .env file with API key (don't push into Git / public repository). Remember to import
+.env
