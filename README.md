@@ -1,4 +1,4 @@
-# solo-project
+# solo-project - IngrEDIBLE (Recipe Search & Save)
 
 1. Identify your user(s)
 Home cooks; people who want creative ideas for cooking or want to avoid food waste
@@ -9,8 +9,6 @@ Develop an app where users can:
 search for recipes by ingredient(s)
 store recipes in a recipe book that they can edit (CRUD operations)
 4. What is the MVP scope? (core features you must get working)
-Recipe search, user data storage, login
-5. What are the tough technical challenges involved with solving this problem?
-Finding and connecting with an open API for searches/queries; webpack design and set up
-6. What are the stretch goals?
-OAuth login; a feature that suggests wine pairings based on ingredients
+Recipe search by ingredient, user created recipe data storage, login
+5. What are the stretch goals?
+OAuth login; more developed CRUD/recipe card feed features; feature that suggests wine pairings based on ingredients
