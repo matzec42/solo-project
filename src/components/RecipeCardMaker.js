@@ -31,8 +31,8 @@ const RecipeCard = () => {
                 setIngredients('');
                 setDirections('');
 
-                // FUTURE WORK: render a new React component for the recipe in browser on client side
-                
+                // FUTURE WORK: render a new React component for the recipe in browser on client side;
+                // develop a recipe feed (more CRUD) for user created recipes
 
             }
         } catch (err) {
