@@ -1,5 +1,6 @@
 const { generateJwtToken, verifyJwtToken } = require('../services/jwtService');
 const pool = require('../models/ingredibleModel');
+const bcrypt = require('bcrypt');
 
 const authController = {};
 
@@ -66,7 +67,7 @@ authController.login = async (req, res, next) => {
         const token = generateJwtToken({ id: user.id, username: user.username })
         
         res.locals.authenticatedUser = { id: user.id, username: user.username }
-        res.cookie('token', token, { maxAge: 300000, httpOnly: true, secure: false, sameSite: 'Lax' })
+        res.cookie('token', token, { maxAge: 300000, httpOnly: true, secure: true, sameSite: 'None' })
         
         return next();
 
@@ -95,6 +96,8 @@ authController.signUp = async (req, res, next) => {
                 }
             });
         }
+
+
 
         // query string for checking/inserting DB for username and PW
         const queryString = `INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *`;
@@ -128,7 +131,7 @@ authController.signUp = async (req, res, next) => {
 
 
 authController.logout = async (req, res, next) => {
-    res.clearCookie('token', { httpOnly: true, secure: false, sameSite: 'Lax' });
+    res.clearCookie('token', { httpOnly: true, secure: true, sameSite: 'None' });
     return next();
 }
 

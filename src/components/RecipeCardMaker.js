@@ -7,7 +7,6 @@ const RecipeCard = () => {
 
     const handleAddRecipe = async (e) => {
         e.preventDefault();
-
         try {
             // handle the recipe submission (e.g., request to server, then store in database)
             if (recipeName && ingredients && directions) {
