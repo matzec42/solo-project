@@ -1,6 +1,6 @@
 const { generateJwtToken, verifyJwtToken } = require('../services/jwtService');
 const pool = require('../models/ingredibleModel');
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 
 const authController = {};
 
@@ -46,6 +46,9 @@ authController.login = async (req, res, next) => {
                 }
             });
         }
+
+        // FUTURE WORK: decrypt password before querying database
+        // then, update line 55 variable (e.g., decryptedPassword)
 
         // query string for checking DB for username and PW
         const queryString = `SELECT * FROM users WHERE username = $1 AND password = $2`;
@@ -97,11 +100,12 @@ authController.signUp = async (req, res, next) => {
             });
         }
 
-
-
         // query string for checking/inserting DB for username and PW
         const queryString = `INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *`;
         const values = [newUsername, newPassword];
+
+        // add logic for encrypting user password --- bycrypt
+        // FUTURE WORK: write an encrypting function in a separate file (e.g., encrypt.js), place it in /services directory
 
         const signUpResult = await pool.query(queryString, values);
         console.log('New user in the DB:', signUpResult.rows[0]);
