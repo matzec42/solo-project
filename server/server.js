@@ -16,7 +16,7 @@ const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 // CORS configuration
 app.use(cors({
-    origin: 'http://localhost:8080',
+    origin: ['http://localhost:8080', 'https://localhost:8080', 'http://localhost:3000', 'https://localhost:3000'],
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
     credentials: true,
