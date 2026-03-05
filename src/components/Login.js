@@ -22,7 +22,7 @@ const Login = ({ isAuthenticated, setIsAuthenticated }) => {
         };
 
         try {
-            const response = await fetch("http://localhost:3000/login",
+            const response = await fetch("http://localhost:3000/v2/login",
                 {  
                     method: 'POST',
                     credentials: 'include',
