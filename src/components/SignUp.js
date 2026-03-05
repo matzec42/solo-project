@@ -10,15 +10,13 @@ const SignUp = () => {
     const handleSignUpClick = async (e) => {
         e.preventDefault();
 
-        console.log(newUsername, newPassword);
-
         if (!newUsername.trim() || !newPassword.trim()) {
             alert('Please enter a valid username and/or password.');
             return;
         };
         
         try {
-            const response = await fetch("http://localhost:3000/signup",
+            const response = await fetch("http://localhost:3000/v2/signup",
                 {  
                     method: 'POST',
                     credentials: 'include',

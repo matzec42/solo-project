@@ -10,7 +10,7 @@ const RecipeCard = () => {
         try {
             // handle the recipe submission (e.g., request to server, then store in database)
             if (recipeName && ingredients && directions) {
-                const addNewRecipeResponse = await fetch("http://localhost:3000/addnewrecipe", {
+                const addNewRecipeResponse = await fetch("http://localhost:3000/v2/new-user-recipe", {
                     method: 'POST',
                     credentials: 'include',
                     headers: { 

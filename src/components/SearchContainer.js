@@ -14,7 +14,7 @@ const SearchContainer = () => {
         
         if(ingredient !== '') {
             try {
-                const response = await fetch("http://localhost:3000/search", {
+                const response = await fetch("http://localhost:3000/v2/search", {
                     method: 'POST',
                     credentials: 'include',
                     headers: {
@@ -39,7 +39,7 @@ const SearchContainer = () => {
                     
                     const recipeIds = data.map(recipe => recipe.id);
                     
-                    const recipeCardsResponse = await fetch("http://localhost:3000/fetchRecipeCards", {
+                    const recipeCardsResponse = await fetch("http://localhost:3000/v2/recipe-cards", {
                         method: 'POST',
                         credentials: 'include',
                         headers: {

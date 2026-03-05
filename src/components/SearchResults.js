@@ -9,7 +9,7 @@ const searchResults = ({ results }) => {
     return (
         <div id='searchResults'>
             <ul>
-                {Array.isArray(displayResults) ? (
+                {Array.isArray(displayResults) && displayResults.length ? (
                     displayResults.map((recipe, index) => (
                         <> 
                             <li className= 'imgLink' >{<RecipeImage key={`image-${index}`} imgResult={recipe.image}/>}</li>

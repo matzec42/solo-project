@@ -11,7 +11,7 @@ const Home = ({ setIsAuthenticated }) => {
 
         try {
             // clear cookie from backend
-            const logoutResponse = await fetch("http://localhost:3000/logout", {
+            const logoutResponse = await fetch("http://localhost:3000/v2/logout", {
                 method: 'POST',
                 credentials: 'include',  // Ensure cookies are sent with the request
             });

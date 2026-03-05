@@ -10,7 +10,7 @@ const App = () => {
     useEffect(() => {
         const verifyUser = async () => {
             try {
-                const response = await fetch('http://localhost:3000/verify', {
+                const response = await fetch('http://localhost:3000/v2/verify', {
                     method: 'GET',
                     credentials: 'include',
                 });
