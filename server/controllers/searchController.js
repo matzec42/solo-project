@@ -43,34 +43,62 @@ searchController.searchByIngredient = (req, res, next) => {
     })
 }
 
-searchController.fetchRecipeCards = async (req, res, next) => {
-    const { recipeIds } = req.body;
+searchController.fetchRecipeDetails = async (req, res, next) => {
+    const recipeId = req.body.data;
+    console.log(`In fetchRecipeDetails, req.body is: ${recipeId}`);
 
     try {
-        const recipeImages = await Promise.all(recipeIds.map(async (id) => {
-            const response = await fetch(`https://api.spoonacular.com/recipes/${id}/card?apiKey=${apiKey}`);
-            // const response = await fetch(`https://api.spoonacular.com/recipes/${id}/card`)
-            // const response = await fetch(`https://api.spoonacular.com/recipes/${id}/information?image=true`)
+        const response = await fetch(`https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${apiKey}`);
+        if (!response.ok) throw new Error('Failed to fetch from Spoonacular.');
 
-            // parse the response as JSON
-            const data = await response.json();
-            return { id, image: data.url }
-        }));
+        // parse the response as JSON
+        const data = await response.json();
+        console.log('Recipe details fetched:', data);
 
-        console.log('Recipe card images fetched:', recipeImages);
+        // store fetched details in res.locals for response
+        res.locals.fetchedRecipeDetails = data;
 
-        // store fetched cards in res.locals for response
-        res.locals.fetchedRecipeCards = recipeImages;
         return next();
 
     } catch (err) {
         return next({
-            log: 'In searchController.fetchRecipeCards, error fetching recipe images',
+            log: 'In searchController.fetchDetails, error fetching recipe details',
             status: 500,
-            message: { err: 'An error occurred while fetching recipe images.' }
+            message: { err: 'An error occurred while fetching recipe details.' }
         });
     }
-
 }
+
+/* Old middleware for v1 querying of API for recipe cards --- DEPRECATED */
+
+// searchController.fetchRecipeCards = async (req, res, next) => {
+//     const { recipeIds } = req.body;
+
+//     try {
+//         const recipeImages = await Promise.all(recipeIds.map(async (id) => {
+//             const response = await fetch(`https://api.spoonacular.com/recipes/${id}/card?apiKey=${apiKey}`);
+//             // const response = await fetch(`https://api.spoonacular.com/recipes/${id}/card`)
+//             // const response = await fetch(`https://api.spoonacular.com/recipes/${id}/information?image=true`)
+
+//             // parse the response as JSON
+//             const data = await response.json();
+//             return { id, image: data.url }
+//         }));
+
+//         console.log('Recipe card images fetched:', recipeImages);
+
+//         // store fetched cards in res.locals for response
+//         res.locals.fetchedRecipeCards = recipeImages;
+//         return next();
+
+//     } catch (err) {
+//         return next({
+//             log: 'In searchController.fetchRecipeCards, error fetching recipe images',
+//             status: 500,
+//             message: { err: 'An error occurred while fetching recipe images.' }
+//         });
+//     }
+
+// }
 
 module.exports = searchController;

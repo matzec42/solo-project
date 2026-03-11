@@ -31,42 +31,8 @@ const SearchContainer = () => {
                 }
                 const data = await response.json();
 
-                // this is not updating properly
+                // update state
                 setResults(data);
-
-                // fetch recipe images using recipe IDs
-                if (data && Array.isArray(data)) {
-                    
-                    const recipeIds = data.map(recipe => recipe.id);
-                    
-                    const recipeCardsResponse = await fetch("http://localhost:3000/v2/recipe-cards", {
-                        method: 'POST',
-                        credentials: 'include',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ recipeIds })
-                    });
-
-                    if (!recipeCardsResponse.ok) {
-                        throw new Error('Failed to retrieve recipes.')
-                    }
-
-                    const fetchedRecipeCards = await recipeCardsResponse.json();
-                    // console.log('Fetched recipe card data:', fetchedRecipeCards);
-
-                    const combinedResults = data.map(recipe => {
-                        const image = fetchedRecipeCards.find(img => img.id === recipe.id);
-                        return { ...recipe, image: image ? image.image : null }
-                    })
-
-                    // update results with fetched recipe data
-                    setResults(combinedResults);
-                    
-                } else {
-                    console.error('Data is not an array:', data)
-                }
-                
                 setSearchIngredient('');
                 
             } catch (error) {
