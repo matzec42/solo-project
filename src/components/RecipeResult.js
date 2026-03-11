@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
-const RecipeImage = ({ imgResult }) => {
-    // console.log('Logging props in RecipeImage.js:', props);
-
+const RecipeResult = ({ titleResult, imgResult, recipeId }) => {
     
     const [imageData, setImageData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     
     useEffect(() => {
-        const renderRecipeCards = async () => {
+        const renderRecipeResults = async () => {
             try {
                 // check if data and image URLs exist
                 if (imgResult !== null) {
@@ -24,8 +23,8 @@ const RecipeImage = ({ imgResult }) => {
                 setLoading(false);
             }
         };
-        renderRecipeCards();
-    }, [imgResult]);
+        renderRecipeResults();
+    }, [titleResult, imgResult]);
 
     if (loading) {
         return <div>...</div>;
@@ -35,10 +34,16 @@ const RecipeImage = ({ imgResult }) => {
         return <div>{error}</div>;
     }
 
+    // clickable Link component, goes to new page for that recipe
     return (
-        <div id='recipeImage'>
+        <div id='recipeResult'>
             {imageData ? (
-                <img src={imageData} alt='Recipe' />
+                <div>
+                    <Link className='recipeSearchResult' to={`/recipes/${recipeId}`}>
+                        <h3>{titleResult}</h3>
+                        <img src={imageData} alt='Recipe' />
+                    </Link>
+                </div>
             ) : (
                 'No image available'
             )}
@@ -46,4 +51,4 @@ const RecipeImage = ({ imgResult }) => {
     );
 };
 
-export default RecipeImage;
+export default RecipeResult;

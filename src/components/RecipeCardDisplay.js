@@ -10,11 +10,10 @@ const RecipeCardDisplay = () => {
     const [recipeCards, setRecipeCards] = useState([]);
 
     const handleGetUserRecipes = async (e) => {
-        console.log('Get User Recipes button test');
 
         // GET request for user recipes --- include credentials
         try {
-            const getAllUserRecipesResponse = await fetch("http://localhost:3000/getmyrecipes", {
+            const getAllUserRecipesResponse = await fetch("http://localhost:3000/v2/user-recipes", {
                 method: 'GET',
                 credentials: 'include',
             });
@@ -30,10 +29,11 @@ const RecipeCardDisplay = () => {
             console.error('Error fetching recipes');
         }
 
-        // FUTURE WORK: make & render user-made recipes as components
-
+        
     }
-
+    
+    // FUTURE WORK: make & render user-made recipes as components
+    
     return (
         <div id='cardDisplay'>            
             <RecipeCardMaker />
