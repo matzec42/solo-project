@@ -10,7 +10,7 @@ const searchResults = ({ results }) => {
     // consider useContext hook, as its a simple use case
     return (
         <div id='searchResults'>
-            <ul>
+            <ul className='searchResultsThumbnails'>
                 {Array.isArray(displayResults) && displayResults.length ? (
                     displayResults.map((recipe, index) => (
                         <li key={recipe.id} className='imgLink'>{

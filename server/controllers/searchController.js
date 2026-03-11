@@ -9,7 +9,7 @@ const apiKey = process.env.SPOONACULAR_API_KEY;
 searchController.searchByIngredient = (req, res, next) => {
     // store searched term in a variable
     const searchTerm = req.body.data;
-    
+
     // recall use of req.params in Unit 9, 10. Use of variable and template literal to query the Star Wars API from one of the middleware functions
     // something similar here with spoonacular API
 
@@ -17,35 +17,34 @@ searchController.searchByIngredient = (req, res, next) => {
 
     // initial set up --- consider async/await and try/catch for consistency
     fetch(url)
-    .then(response => {
-        if(!response.ok) {
-            // console.log('In the first .then, response is not OK')
-            // console.log(response);
-            throw new Error(`Error with API request. Status: ${response.status}`)
+        .then(response => {
+            if (!response.ok) {
+                // console.log('In the first .then, response is not OK')
+                // console.log(response);
+                throw new Error(`Error with API request. Status: ${response.status}`)
+            }
+            return response.json();
         }
-        return response.json();
-    }
-    )
-    .then(data => {
-        console.log('DB results from a searched term in searchController:', data);
-        // store retrieved recipes in res.locals, pass to next middleware
-        res.locals.searchResults = data;
-        
-        return next();
-    })
-    .catch(err => {
-        // console.log(`Error with web API fetch. Error: ${err}`);
-        return next({
-            log: `Error with web API fetch. Error: ${err}`,
-            status: 500,
-            error: 'Something went wrong with your search.'
-        });
-    })
+        )
+        .then(data => {
+            console.log('DB results from a searched term in searchController:', data);
+            // store retrieved recipes in res.locals, pass to next middleware
+            res.locals.searchResults = data;
+
+            return next();
+        })
+        .catch(err => {
+            // console.log(`Error with web API fetch. Error: ${err}`);
+            return next({
+                log: `Error with web API fetch. Error: ${err}`,
+                status: 500,
+                error: 'Something went wrong with your search.'
+            });
+        })
 }
 
 searchController.fetchRecipeDetails = async (req, res, next) => {
     const recipeId = req.body.data;
-    console.log(`In fetchRecipeDetails, req.body is: ${recipeId}`);
 
     try {
         const response = await fetch(`https://api.spoonacular.com/recipes/${recipeId}/information?apiKey=${apiKey}`);
@@ -53,10 +52,34 @@ searchController.fetchRecipeDetails = async (req, res, next) => {
 
         // parse the response as JSON
         const data = await response.json();
-        console.log('Recipe details fetched:', data);
+
+        const filtered = {
+            title: data.title,
+            image: data.image,
+            readyInMinutes: data.readyInMinutes,
+            servings: data.servings,
+            preparationMinutes: data.preparationMinutes,
+            cookingMinutes: data.cookingMinutes,
+            dishTypes: data.dishTypes,
+            diets: data.diets,
+            extendedIngredients: data.extendedIngredients.map(ingredient => ({
+                name: ingredient.name,
+                amount: ingredient.amount,
+                unit: ingredient.unit,
+                image: ingredient.image
+            })),
+            // regex to clean up instructions string (some were rendering on frontend with <ol>, <li> as text)
+            // replaces HTML elements with empty string, deleting them, and line breaks to preserve the list-like format
+            instructions: data.instructions
+                ? data.instructions
+                    .replace(/<li>/gi, '\n')
+                    .replace(/<[^>]*>/g, '')
+                    .trim()
+                : null
+        };
 
         // store fetched details in res.locals for response
-        res.locals.fetchedRecipeDetails = data;
+        res.locals.fetchedRecipeDetails = filtered;
 
         return next();
 
@@ -68,6 +91,8 @@ searchController.fetchRecipeDetails = async (req, res, next) => {
         });
     }
 }
+
+
 
 /* Old middleware for v1 querying of API for recipe cards --- DEPRECATED */
 
