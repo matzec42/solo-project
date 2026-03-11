@@ -1,22 +1,28 @@
 import React from 'react';
-import RecipeImage from './RecipeImage';
+import RecipeResult from './RecipeResult';
 
 const searchResults = ({ results }) => {
-    // console.log('In the searchResults component:', props.results);
+
     const displayResults = results;
 
-    // div component to render search results
+    // renders search results (clickable names with pictures)
+    // anticipate future work --- navigating into RecipeResult --> RecipeDetail, then navigating back (keeping search results/maintaining state)
+    // consider useContext hook, as its a simple use case
     return (
         <div id='searchResults'>
             <ul>
                 {Array.isArray(displayResults) && displayResults.length ? (
                     displayResults.map((recipe, index) => (
-                        <> 
-                            <li className= 'imgLink' >{<RecipeImage key={`image-${index}`} imgResult={recipe.image}/>}</li>
-                        </>
+                        <li key={recipe.id} className='imgLink'>{
+                            <RecipeResult
+                                titleResult={recipe.title}
+                                imgResult={recipe.image}
+                                recipeId={recipe.id} />
+                        }
+                        </li>
                     ))
                 ) : (
-                    <li>No results found.</li>
+                    <li>New recipes await you...</li>
                 )}
             </ul>
         </div>

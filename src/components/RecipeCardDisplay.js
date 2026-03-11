@@ -29,10 +29,11 @@ const RecipeCardDisplay = () => {
             console.error('Error fetching recipes');
         }
 
-        // FUTURE WORK: make & render user-made recipes as components
-
+        
     }
-
+    
+    // FUTURE WORK: make & render user-made recipes as components
+    
     return (
         <div id='cardDisplay'>            
             <RecipeCardMaker />

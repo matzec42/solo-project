@@ -30,8 +30,8 @@ app.get('/', (req, res) => {
     return res.status(200).sendFile(path.join(__dirname, '../build', 'index.html'));
 });
 
-// previously instantiated routers to direct requests to appropriate controller, did not work.
-// FUTURE WORK: route handlers ---> search by ingredient; recipe card CRUD operations; auth
+
+// FUTURE WORK: route handlers ---> user-made recipe card CRUD operations; auth
 
 app.get('/v2/verify', authController.verify, (req, res) => {
     return res.status(200).json(res.locals.verifiedUser);
@@ -54,16 +54,29 @@ app.post('/v2/search', searchController.searchByIngredient, (req, res) => {
     res.status(200).json(res.locals.searchResults);
 });
 
-app.post('/v2/recipe-cards', searchController.fetchRecipeCards, (req, res) => {
+// route handler for fetching specific recipe details
+app.post('/v2/recipe-details', searchController.fetchRecipeDetails, (req, res) => {
     try {
-        console.log('Sending recipe card images to frontend:', res.locals.fetchedRecipeCards);
-        res.status(200).json(res.locals.fetchedRecipeCards);
+        console.log('Sending recipe details to frontend:', res.locals.fetchedRecipeDetails);
+        res.status(200).json(res.locals.fetchedRecipeDetails);
 
     } catch (err) {
-        console.error('Error in /v2/recipe-cards route handler:', err)
+        console.error('Error in /v2/recipe-details route handler:', err)
         return next(err)
     }
 })
+
+/* Old recipe card route for v1 --- DEPRECATED */
+// app.post('/v2/recipe-cards', searchController.fetchRecipeCards, (req, res) => {
+//     try {
+//         console.log('Sending recipe card images to frontend:', res.locals.fetchedRecipeCards);
+//         res.status(200).json(res.locals.fetchedRecipeCards);
+
+//     } catch (err) {
+//         console.error('Error in /v2/recipe-cards route handler:', err)
+//         return next(err)
+//     }
+// })
 
 // route for user-created new recipe
 app.post('/v2/new-user-recipe', recipeController.addNewUserRecipe, (req, res) => {
