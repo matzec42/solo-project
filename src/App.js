@@ -4,6 +4,7 @@ import Login from './components/Login.js';
 import Home from './components/Home.js';
 import SignUp from './components/SignUp.js';
 import RecipeDetail from './components/RecipeDetail.js';
+import { SearchProvider } from './components/SearchContext.js';
 
 const App = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -37,30 +38,32 @@ const App = () => {
     if (isVerifying) return <div>Loading...</div>
 
     return (
-        <div>
-            <Router>
-                <Routes>
-                    <Route
-                        path='/'
-                        element={
-                            <Login
-                                isAuthenticated={isAuthenticated}
-                                setIsAuthenticated={setIsAuthenticated}
-                            />
-                        }
-                    />
-                    <Route path='signup' element={<SignUp />} />
-                    <Route
-                        path='/home'
-                        element={isAuthenticated ? <Home setIsAuthenticated={setIsAuthenticated} /> : <Navigate to='/' />}
-                    />
-                    <Route
-                        path='/recipes/:id'
-                        element={isAuthenticated ? <RecipeDetail /> : <Navigate to='/' />}
-                    />
-                </Routes>
-            </Router>
-        </div>
+        <SearchProvider>
+            <div>
+                <Router>
+                    <Routes>
+                        <Route
+                            path='/'
+                            element={
+                                <Login
+                                    isAuthenticated={isAuthenticated}
+                                    setIsAuthenticated={setIsAuthenticated}
+                                />
+                            }
+                        />
+                        <Route path='signup' element={<SignUp />} />
+                        <Route
+                            path='/home'
+                            element={isAuthenticated ? <Home setIsAuthenticated={setIsAuthenticated} /> : <Navigate to='/' />}
+                        />
+                        <Route
+                            path='/recipes/:id'
+                            element={isAuthenticated ? <RecipeDetail /> : <Navigate to='/' />}
+                        />
+                    </Routes>
+                </Router>
+            </div>
+        </SearchProvider>
     );
 }
 

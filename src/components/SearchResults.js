@@ -10,21 +10,17 @@ const searchResults = ({ results }) => {
     // consider useContext hook, as its a simple use case
     return (
         <div id='searchResults'>
-            <ul className='searchResultsThumbnails'>
-                {Array.isArray(displayResults) && displayResults.length ? (
-                    displayResults.map((recipe, index) => (
-                        <li key={recipe.id} className='imgLink'>{
-                            <RecipeResult
-                                titleResult={recipe.title}
-                                imgResult={recipe.image}
-                                recipeId={recipe.id} />
-                        }
-                        </li>
-                    ))
-                ) : (
-                    <li>New recipes await you...</li>
-                )}
-            </ul>
+            <div className='searchResultsThumbnails'>
+                {displayResults.map((recipe) => (
+                    <div key={recipe.id} className='imgLink'>
+                        <RecipeResult
+                            titleResult={recipe.title}
+                            imgResult={recipe.image}
+                            recipeId={recipe.id}
+                        />
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };

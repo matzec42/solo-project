@@ -1,12 +1,19 @@
 import React from 'react';
-import { useState } from 'react';
+// import { useState } from 'react';
 import SearchResults from './SearchResults';
+import { useSearch } from './SearchContext.js';
+
+
+// variable for pagination
+const RESULTS_PER_PAGE = 8;
 
 const SearchContainer = () => {
 
-    // initialize state for this component
-    const [searchIngredient, setSearchIngredient] = useState('');
-    const [results, setResults] = useState([]);
+    // useContext to help maintain state for this component (keeps search results when navigating to and back from recipes)
+    const { results, setResults, currentPage, setCurrentPage, searchIngredient, setSearchIngredient } = useSearch();
+    // const [searchIngredient, setSearchIngredient] = useState('');
+    // const [results, setResults] = useState([]);
+    // const [currentPage, setCurrentPage] = useState(1);
 
     // define a handler that will send user input to the server
     const handleSearchIngredient = async () => {        
@@ -33,6 +40,8 @@ const SearchContainer = () => {
 
                 // update state
                 setResults(data);
+                // reset to page 1 on new searches
+                setCurrentPage(1);
                 setSearchIngredient('');
                 
             } catch (error) {
@@ -44,6 +53,11 @@ const SearchContainer = () => {
             setSearchIngredient('');
         }
     }
+
+    // pagination
+    const totalPages = Math.ceil(results.length / RESULTS_PER_PAGE);
+    const startIndex = (currentPage - 1) * RESULTS_PER_PAGE;
+    const paginatedResults = results.slice(startIndex, startIndex + RESULTS_PER_PAGE);
 
     // consider changing / updating to form element ---  https://react.dev/reference/react-dom/components/form
     return(
@@ -58,7 +72,20 @@ const SearchContainer = () => {
                 onChange={(e) => setSearchIngredient(e.target.value)}>
             </input>
             <button id='submitButton' onClick={handleSearchIngredient} type='button'>Submit</button>
-            {<SearchResults id='searchResults' results={results}/>}
+
+            <SearchResults id='searchResults' results={paginatedResults}/>
+
+            {results.length > 0 && (
+                <div id='pagination'>
+                    <button onClick={() => setCurrentPage(prev => prev - 1)} disabled={currentPage === 1} >
+                        Previous
+                    </button>
+                    <span>{currentPage} of {totalPages}</span>
+                    <button onClick={() => setCurrentPage(prev => prev + 1)} disabled={currentPage === totalPages}>
+                        Next
+                    </button>
+                </div>
+            )}
         </div>
     )
 }

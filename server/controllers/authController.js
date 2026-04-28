@@ -70,7 +70,7 @@ authController.login = async (req, res, next) => {
         const token = generateJwtToken({ id: user.id, username: user.username })
         
         res.locals.authenticatedUser = { id: user.id, username: user.username }
-        res.cookie('token', token, { maxAge: 300000, httpOnly: true, secure: true, sameSite: 'None' })
+        res.cookie('token', token, { maxAge: 1800000, httpOnly: true, secure: true, sameSite: 'None' })
         
         return next();
 

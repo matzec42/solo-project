@@ -36,7 +36,7 @@ const RecipeResult = ({ titleResult, imgResult, recipeId }) => {
 
     // clickable Link component, goes to new page for that recipe
     return (
-        <div id='recipeResult'>
+        <div className='resultItem'>
             {imageData ? (
                 <div>
                     <Link className='recipeSearchResult' to={`/recipes/${recipeId}`}>
