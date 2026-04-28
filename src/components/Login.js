@@ -60,6 +60,7 @@ const Login = ({ isAuthenticated, setIsAuthenticated }) => {
 
     return (
         <div id= "loginPage">
+            <div id='loginContainer'>
             <h1>
                 IngrEDIBLE!
             </h1>
@@ -86,6 +87,7 @@ const Login = ({ isAuthenticated, setIsAuthenticated }) => {
                 </button>
             </form>
             <footer>Powered by <a href='https://spoonacular.com/food-api'>spoonacular.com</a></footer>
+            </div>
         </div>
     )
 }

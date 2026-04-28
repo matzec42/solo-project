@@ -13,7 +13,7 @@ const RecipeDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    /* renders data in the RecipeDetail component (a Link that is a child of SearchResults.js component, a single page view of a recipe */
+    // renders data in the RecipeDetail component (a Link that is a child of SearchResults.js component, a single page view of a recipe
     useEffect(() => {
         const fetchRecipeDetails = async () => {
             try {
@@ -84,6 +84,11 @@ const RecipeDetail = () => {
                 <div className="recipe-card">
                     <p className="card-label">Instructions</p>
                     <p className="instructions-text">{details.instructions ?? 'Assemble the ingredients and enjoy!'}</p>
+                    {/* User interactions --- save recipe, e.g. */}
+                    <div id="recipe-card-user-interactions" className="recipe-card">
+                        <p className="card-label">Add to My Recipe Book</p>
+                        <button>Save Recipe</button>
+                    </div>
                 </div>
 
                 {/* Sidebar --- recipe stats and ingredient list */}

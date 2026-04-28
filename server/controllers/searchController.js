@@ -13,7 +13,7 @@ searchController.searchByIngredient = (req, res, next) => {
     // recall use of req.params in Unit 9, 10. Use of variable and template literal to query the Star Wars API from one of the middleware functions
     // something similar here with spoonacular API
 
-    const url = `https://api.spoonacular.com/recipes/findByIngredients?apiKey=${apiKey}&ingredients=${searchTerm}&number=3`;
+    const url = `https://api.spoonacular.com/recipes/findByIngredients?apiKey=${apiKey}&ingredients=${searchTerm}&number=24`;
 
     // initial set up --- consider async/await and try/catch for consistency
     fetch(url)
