@@ -78,6 +78,11 @@ app.post('/v2/recipe-details', searchController.fetchRecipeDetails, (req, res) =
 //     }
 // })
 
+// route for saving a Spoonacular recipe
+app.post('/v2/save-recipe', recipeController.saveSpoonacularRecipe, (req, res) => {
+    return res.status(200).json(res.locals.savedRecipe);
+});
+
 // route for user-created new recipe
 app.post('/v2/new-user-recipe', recipeController.addNewUserRecipe, (req, res) => {
     return res.status(200).json(res.locals.newRecipe);

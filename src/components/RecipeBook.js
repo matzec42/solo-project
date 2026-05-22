@@ -5,7 +5,7 @@ const RecipeBook = () => {
     return(
         <div id='recipeBook'>
             <h2>My Own Recipe Book</h2>
-            <h4>Write and save your own recipes below!</h4>
+            <h4>Write and save your own recipes here!</h4>
             <RecipeCardDisplay />
         </div>
     )

@@ -13,6 +13,31 @@ const RecipeDetail = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const handleSaveRecipe = async () => {
+        // console.log('Recipe details being sent', details);
+
+        try {
+            const saveRecipeResponse = await fetch("http://localhost:3000/v2/save-recipe", {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(details)
+            });
+
+            if (!saveRecipeResponse.ok) {
+                throw new Error('Failed to save recipe.');
+            }
+            const data = await saveRecipeResponse.json();
+            // console.log('Recipe saved successfullly:', data);
+            alert('Recipe successfully saved to your recipe book!');
+
+        } catch (err) {
+            console.error('Error saving recipe:', err);
+        }
+    }
+
     // renders data in the RecipeDetail component (a Link that is a child of SearchResults.js component, a single page view of a recipe
     useEffect(() => {
         const fetchRecipeDetails = async () => {
@@ -34,7 +59,7 @@ const RecipeDetail = () => {
                 }
 
                 const data = await response.json();
-                console.log(`Recipe data received:`, data);
+                // console.log(`Recipe data received:`, data);
                 setDetails(data);
 
             } catch (error) {
@@ -44,7 +69,7 @@ const RecipeDetail = () => {
                 setLoading(false);
             }
         }
-        // invoke useEffect (fetching recipe details) when id exists 
+        // invoke useEffect (fetching recipe details) when id exists
         if (id) fetchRecipeDetails();
 
     }, [id])
@@ -87,7 +112,7 @@ const RecipeDetail = () => {
                     {/* User interactions --- save recipe, e.g. */}
                     <div id="recipe-card-user-interactions" className="recipe-card">
                         <p className="card-label">Add to My Recipe Book</p>
-                        <button>Save Recipe</button>
+                        <button onClick={handleSaveRecipe}>Save Recipe</button>
                     </div>
                 </div>
 
