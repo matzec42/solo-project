@@ -4,9 +4,61 @@ const { verifyJwtToken } = require('../services/jwtService');
 
 const recipeController = {};
 
+recipeController.saveSpoonacularRecipe = async (req, res, next) => {
+    const recipe = req.body;
+    console.log('req.body in saveSpoonacularRecipe controller:', req.body);
+
+    try {
+        const token = req.cookies.token;
+
+        // grab token to include in query string (associate user with recipe they make)
+        if (!token) throw new Error('No token provided');
+        const decoded = verifyJwtToken(token);
+        const userId = decoded.id;
+
+
+        if (!recipe.id || !userId) {
+            return next({
+                log: 'In recipeController.saveSpoonacularRecipe, missing a field',
+                status: 401,
+                message: {
+                    err: 'All fields required to save recipe'
+                }
+            });
+        }
+
+        const queryString = `
+            INSERT INTO recipes (title, instructions, extended_ingredients, image, user_id, source, spoonacular_id, ready_in_minutes, servings, preparation_minutes, cooking_minutes, dish_types, diets)
+            VALUES ($1, $2, $3, $4, $5, 'spoonacular', $6, $7, $8, $9, $10, $11, $12)
+            RETURNING *
+        `;
+        const values = [
+            recipe.title, recipe.instructions, JSON.stringify(recipe.extendedIngredients),
+            recipe.image || null, userId, recipe.id,
+            recipe.readyInMinutes || null, recipe.servings || null,
+            recipe.preparationMinutes || null, recipe.cookingMinutes || null,
+            recipe.dishTypes || [], recipe.diets || []
+        ];
+
+        const saveRecipeResult = await pool.query(queryString, values);
+        // console.log('Saved recipe in the DB:', saveRecipeResult.rows[0]);
+
+        res.locals.savedRecipe = saveRecipeResult.rows[0];
+        return next();
+
+    } catch (err) {
+        console.error('Save Spoonacular recipe error:', err)
+        return next({
+            log: 'Error in recipeController.saveSpoonacularRecipe',
+            status: 500,
+            message: { err: 'An error occurred' }
+        });
+    }
+}
+
 recipeController.addNewUserRecipe = async (req, res, next) => {
-    const { recipeName, ingredients, directions } = req.body;
-    
+    const { recipeName, ingredients, directions, imageUrl } = req.body;
+
     try {
         const token = req.cookies.token;
 
@@ -26,17 +78,21 @@ recipeController.addNewUserRecipe = async (req, res, next) => {
             });
         }
 
-        const queryString = `INSERT INTO recipes (recipe_name, ingredients, directions, user_id) VALUES ($1, $2, $3, $4) RETURNING *`;
-        const values = [recipeName, ingredients, directions, userId];
+        const queryString = `
+            INSERT INTO recipes (title, instructions, extended_ingredients, image, user_id, source)
+            VALUES ($1, $2, $3, $4, $5, 'user')
+            RETURNING *
+        `;
+        const values = [recipeName, directions, JSON.stringify(ingredients), imageUrl || null, userId];
 
         const addNewRecipeResult = await pool.query(queryString, values);
-        console.log('New recipe in the DB:', addNewRecipeResult.rows[0]);
+        // console.log('New recipe in the DB:', addNewRecipeResult.rows[0]);
 
-        if(addNewRecipeResult.rows.length === 0) {
+        if (addNewRecipeResult.rows.length === 0) {
             return next({
                 log: 'In recipeController.addNewUserRecipe, unable to add recipe',
                 status: 401,
-                message: { err: 'Invalid submission'}
+                message: { err: 'Invalid submission' }
             });
         }
 
@@ -72,13 +128,6 @@ recipeController.getAllUserRecipes = async (req, res, next) => {
 
         const userRecipesResult = await pool.query(queryString, values);
 
-        if(userRecipesResult.rows.length === 0) {
-            return next({
-                log: 'In recipeController.getAllUserRecipes, unable to fetch recipes',
-                status: 401,
-                message: { err: 'An error occurred'}
-            });
-        }
 
         // response should be an array of recipe objects (name of recipe, ingredients, directions)
         res.locals.userSavedRecipes = userRecipesResult.rows;

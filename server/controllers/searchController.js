@@ -27,7 +27,7 @@ searchController.searchByIngredient = (req, res, next) => {
         }
         )
         .then(data => {
-            console.log('DB results from a searched term in searchController:', data);
+            // console.log('DB results from a searched term in searchController:', data);
             // store retrieved recipes in res.locals, pass to next middleware
             res.locals.searchResults = data;
 
@@ -54,6 +54,7 @@ searchController.fetchRecipeDetails = async (req, res, next) => {
         const data = await response.json();
 
         const filtered = {
+            id: data.id,
             title: data.title,
             image: data.image,
             readyInMinutes: data.readyInMinutes,

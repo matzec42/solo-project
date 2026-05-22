@@ -1,10 +1,10 @@
 import React from 'react';
-import RecipeCardMaker from './RecipeCardMaker';
+import RecipeCardMaker from './RecipeCardForm';
 import { useState } from 'react';
 
 const RecipeCardDisplay = () => {
 
-    // FUTURE WORK --- working with this component and RecipeCardMaker, display user generated recipes
+    // FUTURE WORK --- working with this component and RecipeCardForm, display user generated recipes
     
     const [isClicked, setIsClicked] = useState(false);
     const [recipeCards, setRecipeCards] = useState([]);
@@ -23,6 +23,7 @@ const RecipeCardDisplay = () => {
             };
 
             const data = await getAllUserRecipesResponse.json();
+            if (data) setRecipeCards(data);
             console.log('User-made recipes:', data);
 
         } catch (err) {
@@ -35,9 +36,20 @@ const RecipeCardDisplay = () => {
     // FUTURE WORK: make & render user-made recipes as components
     
     return (
-        <div id='cardDisplay'>            
+        <div id='recipeCardDisplay'>            
             <RecipeCardMaker />
             <button id='getUserRecipesButton' onClick={handleGetUserRecipes}>Get My Recipes</button>
+
+            {recipeCards.length > 0 && (
+                <div id='userRecipesGrid'>
+                    {recipeCards.map((recipe, index) => (
+                        <div key={index} className='userRecipeCard'>
+                            <h4>{recipe.title}</h4>
+                            <p>{recipe.ingredients}</p>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     )
 }
