@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 const RecipeCardForm = () => {
+    // state hooks for form / recipe fields
     const [recipeName, setRecipeName] = useState('');
     const [ingredients, setIngredients] = useState([ { name: '', amount: '', unit: '' } ]);
     const [directions, setDirections] = useState('');
@@ -10,21 +11,21 @@ const RecipeCardForm = () => {
     const [dishTypes, setDishTypes] = useState('');
     const [diets, setDiets] = useState('');
 
+    // handlers for ingredient changes
     const handleIngredientChange = (index, field, value) => {
         const newIngredients = [...ingredients];
         newIngredients[index][field] = value;
         setIngredients(newIngredients);
     };
-
     const handleAddIngredient = () => {
         setIngredients([...ingredients, { name: '', amount: '', unit: '' }]);
     };
-
     const handleRemoveIngredient = (index) => {
         const newIngredients = ingredients.filter((_, i) => i !== index);
         setIngredients(newIngredients);
     }
 
+    // handler for saving a user-created recipe
     const handleAddRecipe = async (e) => {
         e.preventDefault();
         try {
@@ -47,10 +48,11 @@ const RecipeCardForm = () => {
                     throw new Error('A network error occurred.');
                 }
 
-                alert('Your recipe has been saved successfully!');
                 const data = await addNewRecipeResponse.json();
-                console.log('Response from server for new user recipe:', data);
+                alert('Your recipe has been saved successfully!');
+                // console.log('Response from server for new user recipe:', data);
 
+                // reset form
                 setRecipeName('');
                 setIngredients([ { name: '', amount: '', unit: '' } ]);
                 setDirections('');
@@ -59,9 +61,6 @@ const RecipeCardForm = () => {
                 setReadyInMinutes('');
                 setDishTypes('');
                 setDiets('');
-
-                // TO-DO: develop a feed/paginated results (more CRUD) for user created recipes
-
             }
         } catch (err) {
             console.error('Error adding recipe:', err);

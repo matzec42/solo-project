@@ -16,7 +16,7 @@ recipeController.saveSpoonacularRecipe = async (req, res, next) => {
         const decoded = verifyJwtToken(token);
         const userId = decoded.id;
 
-
+        // error handling
         if (!recipe.id || !userId) {
             return next({
                 log: 'In recipeController.saveSpoonacularRecipe, missing a field',
@@ -140,13 +140,13 @@ recipeController.getRecipeById = async (req, res, next) => {
         const recipeDetails = await pool.query(queryString, values);
 
         const row = recipeDetails.rows[0];
-
         if (!row) return next({
             log: 'recipeController.getRecipeById, recipe not found',
             status: 404,
             message: { err: 'Recipe not found' }
         });
 
+        // normalizing response object (corresponding with table names)
         res.locals.recipe = {
             id: row.id,
             title: row.title,
@@ -177,7 +177,6 @@ recipeController.getRecipeById = async (req, res, next) => {
 
 
 recipeController.getAllUserRecipes = async (req, res, next) => {
-
     try {
         // get token from req body
         const token = req.cookies.token;
@@ -193,7 +192,7 @@ recipeController.getAllUserRecipes = async (req, res, next) => {
 
         const userRecipesResult = await pool.query(queryString, values);
 
-        // response should be an array of recipe objects (name of recipe, ingredients, directions)
+        // response is an array of recipe objects (name of recipe, ingredients, directions, etc.)
         res.locals.userSavedRecipes = userRecipesResult.rows;
         return next();
 
