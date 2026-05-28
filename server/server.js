@@ -54,7 +54,7 @@ app.post('/v2/search', searchController.searchByIngredient, (req, res) => {
     res.status(200).json(res.locals.searchResults);
 });
 
-// route handler for fetching specific recipe details
+// route handler for fetching specific recipe details based on a user's search
 app.post('/v2/recipe-details', searchController.fetchRecipeDetails, (req, res) => {
     try {
         console.log('Sending recipe details to frontend:', res.locals.fetchedRecipeDetails);
@@ -83,15 +83,25 @@ app.post('/v2/save-recipe', recipeController.saveSpoonacularRecipe, (req, res) =
     return res.status(200).json(res.locals.savedRecipe);
 });
 
-// route for user-created new recipe
+// route for saving user-created new recipe
 app.post('/v2/new-user-recipe', recipeController.addNewUserRecipe, (req, res) => {
     return res.status(200).json(res.locals.newRecipe);
+});
+
+// route for fetching a single recipe from DB by id
+app.get('/v2/recipe-by-id/:id', recipeController.getRecipeById, (req, res) => {
+    return res.status(200).json(res.locals.recipe);
 });
 
 // route for fetching all user-created recipes
 app.get('/v2/user-recipes', recipeController.getAllUserRecipes, (req, res) => {
     return res.status(200).json(res.locals.userSavedRecipes);
 });
+
+// route for fetching all Spoonacular recipes saved by a user
+app.get('/v2/saved-recipes', recipeController.getSavedSpoonacularRecipes, (req, res) => {
+    return res.status(200).json(res.locals.savedSpoonacularRecipes);
+})
 
 // unknown route handler
 // serve index.html for any other route (let React handle it)

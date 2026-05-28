@@ -1,17 +1,23 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 
 const RecipeDetail = () => {
+    // state hooks for recipe details, loading and error
+    const [details, setDetails] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    
+    // hook to determine URL path for fetch logic (and backend routing)
+    const location = useLocation();
+    const isUserRecipe = location.pathname.startsWith('/my-recipes');
+    const isSavedRecipe = location.pathname.startsWith('/saved-recipes');
+
     // hook to grab recipe ID (params in the URL)
     const { id } = useParams();
     // hook for navigating back to results
     const navigate = useNavigate();
 
-    // state hooks for recipe details, loading and error
-    const [details, setDetails] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
 
     const handleSaveRecipe = async () => {
         // console.log('Recipe details being sent', details);
@@ -38,28 +44,43 @@ const RecipeDetail = () => {
         }
     }
 
-    // renders data in the RecipeDetail component (a Link that is a child of SearchResults.js component, a single page view of a recipe
+
+    // renders data in this RecipeDetail component (a Link that is a child of SearchResults.js component, a single page view of a recipe
     useEffect(() => {
+
+        // function to fetch recipe details (saved recipes --- either user-made OR Spoonacular)
         const fetchRecipeDetails = async () => {
             try {
-                const response = await fetch("http://localhost:3000/v2/recipe-details", {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    // mode: 'no-cors',
-                    body: JSON.stringify({
-                        data: id
-                    }),
-                });
+                let data;
+                // fetch for a saved recipe, including user recipe ID or Spoonacular ID in URL params
+                if (isUserRecipe || isSavedRecipe) {
+                    const response = await fetch(`http://localhost:3000/v2/recipe-by-id/${id}`, {
+                        method: 'GET',
+                        credentials: 'include',
+                    })
 
-                if (!response.ok) {
-                    throw new Error('A network error occurred.')
+                    if (!response.ok) throw new Error('A network error occurred.');
+                    data = await response.json();
+
+                } else {
+                    // fetch for an unsaved Spoonacular recipe --- i.e., a result of a user search
+                    const response = await fetch("http://localhost:3000/v2/recipe-details", {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        // mode: 'no-cors',
+                        body: JSON.stringify({
+                            data: id
+                        }),
+                    });
+
+                    if (!response.ok) throw new Error('A network error occurred.');
+                    data = await response.json();
                 }
 
-                const data = await response.json();
-                // console.log(`Recipe data received:`, data);
+                // update recipe details for rendering
                 setDetails(data);
 
             } catch (error) {
@@ -69,20 +90,22 @@ const RecipeDetail = () => {
                 setLoading(false);
             }
         }
-        // invoke useEffect (fetching recipe details) when id exists
+        // invoke useEffect (fetching user or saved recipe details) when id exists
         if (id) fetchRecipeDetails();
 
-    }, [id])
+    }, [id, isUserRecipe, isSavedRecipe])
 
-    // 
+
+    // conditional components while data is fetched/rendered
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
     if (!details) return null;
 
+
     return (
         <div id="recipeDetailPage">
             <button className="back-btn" onClick={() => navigate(-1)}>
-                ← Back to results
+                ← Back
             </button>
 
             {/* Recipe image */}
