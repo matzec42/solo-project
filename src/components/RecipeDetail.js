@@ -2,6 +2,8 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 
+/* RecipeDetail --- reusable component for rendering Spoonacular-searched Recipes or user-made recipes on a single page */
+
 const RecipeDetail = () => {
     // state hooks for recipe details, loading and error
     const [details, setDetails] = useState(null);
@@ -45,9 +47,8 @@ const RecipeDetail = () => {
     }
 
 
-    // renders data in this RecipeDetail component (a Link that is a child of SearchResults.js component, a single page view of a recipe
+    // renders data in this RecipeDetail component (a Link that is a child of SearchResults.js component or a saved recipe -> a single page view of a recipe)
     useEffect(() => {
-
         // function to fetch recipe details (saved recipes --- either user-made OR Spoonacular)
         const fetchRecipeDetails = async () => {
             try {
@@ -63,7 +64,7 @@ const RecipeDetail = () => {
                     data = await response.json();
 
                 } else {
-                    // fetch for an unsaved Spoonacular recipe --- i.e., a result of a user search
+                    // fetch for Spoonacular recipe based on a user search --- i.e., a result of a search (see SearchContainer, SearchResults components)
                     const response = await fetch("http://localhost:3000/v2/recipe-details", {
                         method: 'POST',
                         credentials: 'include',
