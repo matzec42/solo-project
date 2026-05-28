@@ -5,6 +5,10 @@ const RecipeCardForm = () => {
     const [ingredients, setIngredients] = useState([ { name: '', amount: '', unit: '' } ]);
     const [directions, setDirections] = useState('');
     const [imageUrl, setImageUrl] = useState('');
+    const [servings, setServings] = useState('');
+    const [readyInMinutes, setReadyInMinutes] = useState('');
+    const [dishTypes, setDishTypes] = useState('');
+    const [diets, setDiets] = useState('');
 
     const handleIngredientChange = (index, field, value) => {
         const newIngredients = [...ingredients];
@@ -24,6 +28,10 @@ const RecipeCardForm = () => {
     const handleAddRecipe = async (e) => {
         e.preventDefault();
         try {
+            // variables to store optional recipe info for POST request
+            const dishTypesArray = dishTypes ? dishTypes.split(',').map(s => s.trim()) : [];
+            const dietsArray = diets ? diets.split(',').map(s => s.trim()) : [];
+
             // handle the recipe submission (e.g., request to server, then store in database)
             if (recipeName && ingredients && directions) {
                 const addNewRecipeResponse = await fetch("http://localhost:3000/v2/new-user-recipe", {
@@ -32,13 +40,14 @@ const RecipeCardForm = () => {
                     headers: { 
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ recipeName, ingredients, directions, imageUrl })
+                    body: JSON.stringify({ recipeName, ingredients, directions, imageUrl, servings, readyInMinutes, dishTypes: dishTypesArray, diets: dietsArray })
                 });
 
                 if (!addNewRecipeResponse.ok) {
                     throw new Error('A network error occurred.');
                 }
 
+                alert('Your recipe has been saved successfully!');
                 const data = await addNewRecipeResponse.json();
                 console.log('Response from server for new user recipe:', data);
 
@@ -46,9 +55,12 @@ const RecipeCardForm = () => {
                 setIngredients([ { name: '', amount: '', unit: '' } ]);
                 setDirections('');
                 setImageUrl('');
+                setServings('');
+                setReadyInMinutes('');
+                setDishTypes('');
+                setDiets('');
 
-                // FUTURE WORK: render a new React component for the recipe in browser on client side;
-                // develop a recipe feed (more CRUD) for user created recipes
+                // TO-DO: develop a feed/paginated results (more CRUD) for user created recipes
 
             }
         } catch (err) {
@@ -112,6 +124,42 @@ const RecipeCardForm = () => {
                         id='imageUrl' 
                         value={imageUrl} 
                         onChange={(e) => setImageUrl(e.target.value)} 
+                    />
+                </div>
+                <div className='recipeCardMakerFieldDivs'>
+                    <label htmlFor='servings'>Servings: </label>
+                    <input 
+                        type='number' 
+                        id='servings' 
+                        value={servings}
+                        onChange={(e) => setServings(e.target.value)} 
+                    />
+                </div>
+                <div className='recipeCardMakerFieldDivs'>
+                    <label htmlFor='readyInMinutes'>Total Time (mins): </label>
+                    <input 
+                        type='number' 
+                        id='readyInMinutes' 
+                        value={readyInMinutes}
+                        onChange={(e) => setReadyInMinutes(e.target.value)} 
+                    />
+                </div>
+                <div className='recipeCardMakerFieldDivs'>
+                    <label htmlFor='dishTypes'>Dish Types (e.g., Dinner, Breakfast, Main Dish): </label>
+                    <input 
+                        type='text' 
+                        id='dishTypes' 
+                        value={dishTypes}
+                        onChange={(e) => setDishTypes(e.target.value)}
+                    />
+                </div>
+                <div className='recipeCardMakerFieldDivs'>
+                    <label htmlFor='diets'>Diets (e.g., Gluten Free, Vegan): </label>
+                    <input 
+                        type='text' 
+                        id='diets' 
+                        value={diets}
+                        onChange={(e) => setDiets(e.target.value)}
                     />
                 </div>
                 <button id='addRecipeBtn' type='submit'>Add a New Recipe</button>

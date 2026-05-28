@@ -60,6 +60,14 @@ const App = () => {
                             path='/recipes/:id'
                             element={isAuthenticated ? <RecipeDetail /> : <Navigate to='/' />}
                         />
+                        <Route
+                            path='/my-recipes/:id'
+                            element={isAuthenticated ? <RecipeDetail /> : <Navigate to='/' />}
+                        />
+                        <Route
+                            path='/saved-recipes/:id'
+                            element={isAuthenticated ? <RecipeDetail /> : <Navigate to='/' />}
+                        />
                     </Routes>
                 </Router>
             </div>

@@ -1,55 +1,43 @@
 import React from 'react';
-import RecipeCardMaker from './RecipeCardForm';
+import RecipeCardForm from './RecipeCardForm';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const RecipeCardDisplay = () => {
 
-    // FUTURE WORK --- working with this component and RecipeCardForm, display user generated recipes
-    
-    const [isClicked, setIsClicked] = useState(false);
-    const [recipeCards, setRecipeCards] = useState([]);
+const RecipeCardDisplay = ({ userRecipes }) => {
 
-    const handleGetUserRecipes = async (e) => {
+    const [currentPage, setCurrentPage] = useState(1);
 
-        // GET request for user recipes --- include credentials
-        try {
-            const getAllUserRecipesResponse = await fetch("http://localhost:3000/v2/user-recipes", {
-                method: 'GET',
-                credentials: 'include',
-            });
+    const RECIPES_PER_PAGE = 8;
+    const totalPages = Math.ceil(userRecipes.length / RECIPES_PER_PAGE);
+    const startIndex = (currentPage - 1) * RECIPES_PER_PAGE;
+    const paginatedRecipes = userRecipes.slice(startIndex, startIndex + RECIPES_PER_PAGE);
 
-            if (!getAllUserRecipesResponse.ok) {
-                throw new Error('Failed to retrieve recipes')
-            };
-
-            const data = await getAllUserRecipesResponse.json();
-            if (data) setRecipeCards(data);
-            console.log('User-made recipes:', data);
-
-        } catch (err) {
-            console.error('Error fetching recipes');
-        }
-
-        
-    }
-    
-    // FUTURE WORK: make & render user-made recipes as components
-    
     return (
-        <div id='recipeCardDisplay'>            
-            <RecipeCardMaker />
-            <button id='getUserRecipesButton' onClick={handleGetUserRecipes}>Get My Recipes</button>
-
-            {recipeCards.length > 0 && (
-                <div id='userRecipesGrid'>
-                    {recipeCards.map((recipe, index) => (
-                        <div key={index} className='userRecipeCard'>
-                            <h4>{recipe.title}</h4>
-                            <p>{recipe.ingredients}</p>
+        <div id='recipeCardDisplay'>
+            <div className='searchResultsThumbnails'>
+                {paginatedRecipes.map((recipe) => (
+                    <Link key={recipe.id} to={`/my-recipes/${recipe.id}`} className='recipeSearchResult'>
+                        <div className='resultItem'>
+                            {recipe.image && <img src={recipe.image} alt={recipe.title} />}
+                            <h3>{recipe.title}</h3>
                         </div>
-                    ))}
+                    </Link>
+                ))}
+            </div>
+            {userRecipes.length > 0 && (
+                <div id='pagination'>
+                    <button onClick={() => setCurrentPage(prev => prev - 1)} disabled={currentPage === 1}>
+                        Previous
+                    </button>
+                    <span>{currentPage} of {totalPages}</span>
+                    <button onClick={() => setCurrentPage(prev => prev + 1)} disabled={currentPage === totalPages}>
+                        Next
+                    </button>
                 </div>
             )}
+
+            <RecipeCardForm />
         </div>
     )
 }
