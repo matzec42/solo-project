@@ -33,6 +33,8 @@ app.get('/', (req, res) => {
 
 // FUTURE WORK: route handlers ---> user-made recipe card CRUD operations (delete, update)
 
+
+/** Authentication routes **/
 app.get('/v2/verify', authController.verify, (req, res) => {
     return res.status(200).json(res.locals.verifiedUser);
 });
@@ -49,12 +51,15 @@ app.post('/v2/signup', authController.signUp, (req, res) => {
     return res.status(200).json(res.locals.newUser);
 });
 
-// route handler for "What Can I Make With ..." search bar
+
+/** Search-Related routes **/
+
+// route handler for user search --- "What Can I Make With ..." search bar
 app.post('/v2/search', searchController.searchByIngredient, (req, res) => {
     res.status(200).json(res.locals.searchResults);
 });
 
-// route handler for fetching specific recipe details based on a user's search
+// route handler for fetching specific recipe details based on a user's selection of a search result
 app.post('/v2/recipe-details', searchController.fetchRecipeDetails, (req, res) => {
     try {
         console.log('Sending recipe details to frontend:', res.locals.fetchedRecipeDetails);
@@ -66,6 +71,9 @@ app.post('/v2/recipe-details', searchController.fetchRecipeDetails, (req, res) =
     }
 })
 
+
+/** Saving Recipes routes **/
+
 // route for saving a Spoonacular recipe
 app.post('/v2/save-recipe', recipeController.saveSpoonacularRecipe, (req, res) => {
     return res.status(200).json(res.locals.savedRecipe);
@@ -75,6 +83,9 @@ app.post('/v2/save-recipe', recipeController.saveSpoonacularRecipe, (req, res) =
 app.post('/v2/new-user-recipe', recipeController.addNewUserRecipe, (req, res) => {
     return res.status(200).json(res.locals.newRecipe);
 });
+
+
+/** Recipe Fetching (GET Request) routes **/
 
 // route for fetching a single recipe from DB by id
 app.get('/v2/recipe-by-id/:id', recipeController.getRecipeById, (req, res) => {
@@ -90,6 +101,7 @@ app.get('/v2/user-recipes', recipeController.getAllUserRecipes, (req, res) => {
 app.get('/v2/saved-recipes', recipeController.getSavedSpoonacularRecipes, (req, res) => {
     return res.status(200).json(res.locals.savedSpoonacularRecipes);
 })
+
 
 // unknown route handler
 // serve index.html for any other route (let React handle it)
