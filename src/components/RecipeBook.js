@@ -4,17 +4,19 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const RecipeBook = () => {
-
+    // state for Spoonacular saved and user-made saved recipes
     const [activeTab, setActiveTab] = useState('user');
     const [savedRecipes, setSavedRecipes] = useState([]);
     const [userRecipes, setUserRecipes] = useState([]);
 
+    // state, variables for pagination
     const [savedPage, setSavedPage] = useState(1);
     const SAVED_PER_PAGE = 8;
     const totalSavedPages = Math.ceil(savedRecipes.length / SAVED_PER_PAGE);
     const savedStartIndex = (savedPage - 1) * SAVED_PER_PAGE;
     const paginatedSaved = savedRecipes.slice(savedStartIndex, savedStartIndex + SAVED_PER_PAGE);
 
+    
     const handleGetUserRecipes = async () => {
         try {
             const response = await fetch("http://localhost:3000/v2/user-recipes", {
@@ -83,6 +85,7 @@ const RecipeBook = () => {
                             {paginatedSaved.map(recipe => (
                                 <Link key={recipe.id} to={`/saved-recipes/${recipe.id}`} className='recipeSearchResult'>
                                     <div className='resultItem'>
+                                        <span className='source-badge saved-badge'>Saved</span>
                                         {recipe.image && <img src={recipe.image} alt={recipe.title} />}
                                         <h3>{recipe.title}</h3>
                                     </div>

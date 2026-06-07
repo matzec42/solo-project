@@ -40,6 +40,19 @@ recipeController.saveSpoonacularRecipe = async (req, res, next) => {
             recipe.dishTypes || [], recipe.diets || []
         ];
 
+        const checkDuplicate = await pool.query(
+            `SELECT id FROM recipes WHERE spoonacular_id = $1 AND user_id = $2`,
+            [recipe.id, userId]
+        );
+
+        if (checkDuplicate.rows.length > 0) {
+            return next({
+                log: 'Duplicate recipe',
+                status: 409,
+                message: { err: 'Recipe already saved' }
+            });
+        }
+
         const saveRecipeResult = await pool.query(queryString, values);
         // console.log('Saved recipe in the DB:', saveRecipeResult.rows[0]);
 

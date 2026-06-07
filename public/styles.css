@@ -11,6 +11,7 @@ body {
     /* background: #f5f5f5; */
 }
 
+
 /* Login */
 
 #loginPage {
@@ -35,7 +36,6 @@ body {
 }
 
 
-
 /* Home page */
 
 #homePage {
@@ -44,7 +44,6 @@ body {
     justify-content: center;
     align-items: center;
 }
-
 
 
 /* RecipeBook component styling */
@@ -122,6 +121,7 @@ body {
     font-weight: 400;
     margin: 0 0 1.2em;
 }
+
 
 /* RecipeCardDisplay page styling */
 
@@ -208,7 +208,6 @@ body {
 #deleteRecipeBtn {
     background-color: #e05252;
 }
-
 
 
 /* User recipes display */
@@ -319,7 +318,6 @@ input {
 }
 
 
-
 /* General button styling */
 button {
     margin: 8px;
@@ -403,7 +401,6 @@ footer {
 }
 
 
-
 /* SearchContainer, SearchResults component styling */
 
 #searchContainer {
@@ -476,7 +473,6 @@ footer {
 }
 
 
-
 /* RecipeResult component (clickable links to individual recipes) */
 
 .recipeSearchResult {
@@ -487,6 +483,30 @@ footer {
     color: inherit;
 }
 
+
+/* Badge styling for Spoonacular and user-made recipes */
+
+.source-badge {
+    display: inline-block;
+    font-size: 0.7em;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-style: normal;
+    margin-bottom: 0.5em;
+}
+
+.user-badge {
+    background-color: rgba(0, 128, 0, 0.15);
+    border: 1px solid rgba(0, 128, 0, 0.4);
+    color: green;
+}
+
+.saved-badge {
+    background-color: rgba(0, 0, 200, 0.1);
+    border: 1px solid rgba(0, 0, 200, 0.3);
+    color: darkblue;
+}
 
 
 /* RecipeDetails page styling */

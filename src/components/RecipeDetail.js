@@ -9,7 +9,7 @@ const RecipeDetail = () => {
     const [details, setDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    
+
     // hook to determine URL path for fetch logic (and backend routing)
     const location = useLocation();
     const isUserRecipe = location.pathname.startsWith('/my-recipes');
@@ -34,9 +34,14 @@ const RecipeDetail = () => {
                 body: JSON.stringify(details)
             });
 
+            if (saveRecipeResponse.status === 409) {
+                alert('You have already saved this recipe!');
+                return;
+            }
             if (!saveRecipeResponse.ok) {
                 throw new Error('Failed to save recipe.');
             }
+
             const data = await saveRecipeResponse.json();
             // console.log('Recipe saved successfullly:', data);
             alert('Recipe successfully saved to your recipe book!');
@@ -134,10 +139,12 @@ const RecipeDetail = () => {
                     <p className="card-label">Instructions</p>
                     <p className="instructions-text">{details.instructions ?? 'Assemble the ingredients and enjoy!'}</p>
                     {/* User interactions --- save recipe, e.g. */}
-                    <div id="recipe-card-user-interactions" className="recipe-card">
-                        <p className="card-label">Add to My Recipe Book</p>
-                        <button onClick={handleSaveRecipe}>Save Recipe</button>
-                    </div>
+                    {!isUserRecipe && !isSavedRecipe && (
+                        <div id="recipe-card-user-interactions" className="recipe-card">
+                            <p className="card-label">Add to My Recipe Book</p>
+                            <button onClick={handleSaveRecipe}>Save Recipe</button>
+                        </div>
+                    )}
                 </div>
 
                 {/* Sidebar --- recipe stats and ingredient list */}
