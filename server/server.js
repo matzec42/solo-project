@@ -86,7 +86,7 @@ app.post('/v2/new-user-recipe', recipeController.addNewUserRecipe, (req, res) =>
 
 /** Recipe Deletion **/
 
-app.post('/v2/delete-recipe', recipeController.deleteRecipe, (req, res) => {
+app.delete('/v2/delete-recipe', recipeController.deleteRecipe, (req, res) => {
     return res.status(200).json(res.locals.deletedRecipe);
 })
 

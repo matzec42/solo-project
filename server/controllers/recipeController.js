@@ -126,8 +126,6 @@ recipeController.addNewUserRecipe = async (req, res, next) => {
 
 
 recipeController.deleteRecipe = async (req, res, next) => {
-    console.log('deleteRecipe controller hit');
-    console.log('req.body:', req.body);
     const { id } = req.body;
     console.log('Request body in deleteRecipe controller:', id);
 

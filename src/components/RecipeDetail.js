@@ -57,7 +57,7 @@ const RecipeDetail = () => {
 
         try {
             const deleteRecipeResponse = await fetch("http://localhost:3000/v2/delete-recipe", {
-                method: 'POST',
+                method: 'DELETE',
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json'
