@@ -125,6 +125,50 @@ recipeController.addNewUserRecipe = async (req, res, next) => {
 }
 
 
+recipeController.deleteRecipe = async (req, res, next) => {
+    const { id } = req.body;
+    console.log('Request body in deleteRecipe controller:', id);
+
+    try {
+        const token = req.cookies.token;
+
+        if (!token) throw new Error('No token provided');
+        const decoded = verifyJwtToken(token);
+        const userId = decoded.id;
+
+        // error handling
+        if (!id || !userId) {
+            return next({
+                log: 'In recipeController.deleteRecipe, missing recipe or user ID',
+                status: 401,
+                message: {
+                    err: 'Missing data required to delete recipe'
+                }
+            });
+        }
+
+        const queryString = `DELETE FROM recipes WHERE id = $1 AND user_id = $2`;
+        const values = [id, userId];
+
+        const deleteRecipeResult = await pool.query(queryString, values);
+        console.log(`deleteRecipeResult log: ${deleteRecipeResult}`);
+
+        res.locals.deletedRecipe = `Recipe ${deleteRecipeResult} successfully deleted`;
+        
+        return next();
+
+    } catch (err) {
+        console.error('Recipe deletion error:', err)
+        return next({
+            log: 'Error in recipeController.deleteRecipe',
+            status: 500,
+            message: { err: 'An error occurred' }
+        });
+    }
+
+}
+
+
 recipeController.getRecipeById = async (req, res, next) => {
     const { id } = req.params;
 
