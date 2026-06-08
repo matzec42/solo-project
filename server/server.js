@@ -17,11 +17,10 @@ app.use(cookieParser());
 // CORS configuration
 app.use(cors({
     origin: ['http://localhost:8080', 'https://localhost:8080', 'http://localhost:3000', 'https://localhost:3000'],
-    methods: ['GET', 'POST'],
+    methods: ['GET', 'POST', 'DELETE'],
     allowedHeaders: ['Content-Type'],
     credentials: true,
 }));
-
 
 // statically serve assets in build folder
 app.use(express.static(path.resolve(__dirname, '../build/')));
@@ -85,6 +84,13 @@ app.post('/v2/new-user-recipe', recipeController.addNewUserRecipe, (req, res) =>
 });
 
 
+/** Recipe Deletion **/
+
+app.post('/v2/delete-recipe', recipeController.deleteRecipe, (req, res) => {
+    return res.status(200).json(res.locals.deletedRecipe);
+})
+
+
 /** Recipe Fetching (GET Request) routes **/
 
 // route for fetching a single recipe from DB by id
@@ -102,6 +108,8 @@ app.get('/v2/saved-recipes', recipeController.getSavedSpoonacularRecipes, (req, 
     return res.status(200).json(res.locals.savedSpoonacularRecipes);
 })
 
+
+app.options('*', cors());
 
 // unknown route handler
 // serve index.html for any other route (let React handle it)

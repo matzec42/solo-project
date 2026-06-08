@@ -52,6 +52,33 @@ const RecipeDetail = () => {
     }
 
 
+    const handleDeleteRecipe = async () => {
+        // console.log('Recipe details being sent', details.id);
+
+        try {
+            const deleteRecipeResponse = await fetch("http://localhost:3000/v2/delete-recipe", {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: details.id })
+            });
+
+            if (!deleteRecipeResponse.ok) {
+                throw new Error('Failed to delete recipe.');
+            }
+
+            const data = await deleteRecipeResponse.json();
+            alert('Recipe successfully deleted.');
+            navigate('/home');
+
+        } catch (err) {
+            console.error('Error deleting recipe:', err);
+        }
+    }
+
+
     // renders data in this RecipeDetail component (a Link that is a child of SearchResults.js component or a saved recipe -> a single page view of a recipe)
     useEffect(() => {
         // function to fetch recipe details (saved recipes --- either user-made OR Spoonacular)
@@ -143,6 +170,12 @@ const RecipeDetail = () => {
                         <div id="recipe-card-user-interactions" className="recipe-card">
                             <p className="card-label">Add to My Recipe Book</p>
                             <button onClick={handleSaveRecipe}>Save Recipe</button>
+                        </div>
+                    )}
+                    {(isUserRecipe || isSavedRecipe) && (
+                        <div id="recipe-card-user-interactions" className="recipe-card">
+                            <p className="card-label">Delete From My Recipe Book</p>
+                            <button onClick={handleDeleteRecipe}>Delete Recipe</button>
                         </div>
                     )}
                 </div>
