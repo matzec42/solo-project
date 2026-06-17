@@ -1,15 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
 body {
     /* font style */
-    font-family: 'Inter';
+    font-family: 'Nunito';
     font-size: 1em;
     width: 100%;
 
     /* background color */
     background-color: rgb(225, 245, 225);
     /* background: #f5f5f5; */
+
+    /* TO-DO: wire up with a button in UI to toggle b/w light and dark modes */
+    /* background: light-dark(white, black);
+    color: light-dark(black, white); */
 }
+
+/* Styling for light/dark mode --- see body styling above */
+/* :root {
+  color-scheme: light dark;
+} */
 
 
 /* Login */
@@ -83,15 +93,15 @@ body {
     width: auto;
     padding: 0.5em 1.5em;
     background: none;
-    border: 2px solid green;
-    color: green;
+    border: 2px solid rgba(36, 168, 36, 0.976);
+    color: rgba(36, 168, 36, 0.976);
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
 }
 
 .tab-btn.active {
-    background-color: green;
+    background-color: rgba(36, 168, 36, 0.976);
     color: white;
 }
 
@@ -109,7 +119,7 @@ body {
 
 #recipeBook h2 {
     text-align: center;
-    color: green;
+    color: black;
     font-size: 1.6em;
     font-weight: 700;
     margin: 0 0 0.2em;

@@ -68,9 +68,11 @@ const Login = ({ isAuthenticated, setIsAuthenticated }) => {
                 <h3>Log into IngrEDIBLE</h3>
                 <input
                     id="loginFieldUsername"
+                    type="email"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     placeholder="Username"
+                    required
                 /><br />
                 <input
                     id="loginFieldPassword"
@@ -78,6 +80,7 @@ const Login = ({ isAuthenticated, setIsAuthenticated }) => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Password"
+                    required
                 /><br />
                 <button className="loginButton" type="submit" >Login</button>
 

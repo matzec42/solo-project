@@ -4,6 +4,8 @@ const { verifyJwtToken } = require('../services/jwtService');
 
 const recipeController = {};
 
+const DEFAULT_RECIPE_IMAGE = '/images/recipe-image.jpg'
+
 recipeController.saveSpoonacularRecipe = async (req, res, next) => {
     const recipe = req.body;
     console.log('req.body in saveSpoonacularRecipe controller:', req.body);
@@ -97,7 +99,7 @@ recipeController.addNewUserRecipe = async (req, res, next) => {
             VALUES ($1, $2, $3, $4, $5, 'user', $6, $7, $8, $9)
             RETURNING *
         `;
-        const values = [recipeName, directions, JSON.stringify(ingredients), imageUrl || null, userId, servings || null, readyInMinutes || null, dishTypes || [], diets || []];
+        const values = [recipeName, directions, JSON.stringify(ingredients), imageUrl?.trim() || DEFAULT_RECIPE_IMAGE, userId, servings || null, readyInMinutes || null, dishTypes || [], diets || []];
 
         const addNewRecipeResult = await pool.query(queryString, values);
         // console.log('New recipe in the DB:', addNewRecipeResult.rows[0]);
@@ -207,7 +209,7 @@ recipeController.getRecipeById = async (req, res, next) => {
         res.locals.recipe = {
             id: row.id,
             title: row.title,
-            image: row.image,
+            image: row.image || DEFAULT_RECIPE_IMAGE,
             instructions: row.instructions,
             servings: row.servings,
             readyInMinutes: row.ready_in_minutes,
@@ -250,7 +252,12 @@ recipeController.getAllUserRecipes = async (req, res, next) => {
         const userRecipesResult = await pool.query(queryString, values);
 
         // response is an array of recipe objects (name of recipe, ingredients, directions, etc.)
-        res.locals.userSavedRecipes = userRecipesResult.rows;
+        // mapping default image if there is no saved image in DB
+        res.locals.userSavedRecipes = userRecipesResult.rows.map(recipe => ({
+            ...recipe,
+            image: recipe.image || DEFAULT_RECIPE_IMAGE
+        }));
+
         return next();
 
     } catch (err) {
@@ -281,7 +288,13 @@ recipeController.getSavedSpoonacularRecipes = async (req, res, next) => {
         const savedSpoonacularRecipesResult = await pool.query(queryString, values);
 
         // response should be an array of recipe objects (name of recipe, ingredients, directions)
-        res.locals.savedSpoonacularRecipes = savedSpoonacularRecipesResult.rows;
+        // mapping default image if there is no saved image in DB
+        res.locals.savedSpoonacularRecipes =
+        savedSpoonacularRecipesResult.rows.map(recipe => ({
+            ...recipe,
+            image: recipe.image || DEFAULT_RECIPE_IMAGE
+        }));
+
         return next();
 
     } catch (err) {
