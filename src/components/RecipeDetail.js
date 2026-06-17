@@ -143,7 +143,10 @@ const RecipeDetail = () => {
 
             {/* Recipe image */}
             <div className="recipe-hero">
-                <img src={details.image} alt={details.title} />
+                <img src={details.image || '/images/recipe-image.jpg'} alt={details.title} onError={(e) => {
+                    e.target.src = '/images/recipe-image.jpg';
+                    }} 
+                />
                 <div className="recipe-hero-overlay" />
                 <div className="recipe-hero-title">
                     <h2>{details.title}</h2>

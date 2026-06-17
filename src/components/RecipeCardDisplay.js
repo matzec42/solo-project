@@ -20,7 +20,13 @@ const RecipeCardDisplay = ({ userRecipes }) => {
                     <Link key={recipe.id} to={`/my-recipes/${recipe.id}`} className='recipeSearchResult'>
                         <div className='resultItem'>
                             <span className='source-badge user-badge'>My Recipe</span>
-                            {recipe.image && <img src={recipe.image} alt={recipe.title} />}
+                            <img
+                                src={recipe.image || '/images/recipe-image.jpg'}
+                                alt={recipe.title}
+                                onError={(e) => {
+                                    e.target.src = '/images/recipe-image.jpg';
+                                }}
+                            />
                             <h3>{recipe.title}</h3>
                         </div>
                     </Link>
